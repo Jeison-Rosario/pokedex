@@ -58,16 +58,10 @@ const connection = new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSE
 connection.sync()
   .then(() => {
     console.log('Database synced successfully!');
+    app.listen(3000, () => {
+      console.log('Server is running on port 3000');
+    });
   })
   .catch((err) => {
     console.error('Error syncing the database:', err);
   });
-
-connection
-    .sync()
-    .then(() => {
-        app.listen(3000);
-    })
-    .catch((err) => {
-        console.error("Error al sincronizar la base de datos:", err);
-    });
