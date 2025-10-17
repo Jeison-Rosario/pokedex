@@ -2,8 +2,9 @@ const express = require("express");
 const fs = require('fs');
 const path = require("path");
 const { engine } = require("express-handlebars");
-const { Sequelize } = require('sequelize');
 require('dotenv').config();
+const { Sequelize } = require('sequelize');
+
 
 const { Pokemon, Region, Tipo } = require("./models/index");
 
