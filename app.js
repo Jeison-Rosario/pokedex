@@ -54,6 +54,7 @@ const connection = new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSE
   host: process.env.MYSQLHOST,
   dialect: 'mysql',
   port: process.env.MYSQLPORT,
+  logging: console.log,
 });
 
 connection.sync()
