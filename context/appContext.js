@@ -1,8 +1,8 @@
 const { Sequelize } = require('sequelize');
 
-const connection = new Sequelize('pokedex', 'root', '', {
+const connection = new Sequelize('pokedex', 'root', 'zNNkrztxGBOGJYhHVxKboIlmwjVohCLI', {
     dialect: 'mysql',
-    host: 'localhost',
+    host: 'mysql.railway.internal',
     port: 3306
 });
 
