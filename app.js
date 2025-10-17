@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require('fs');
 const path = require("path");
 const { engine } = require("express-handlebars");
-const mysql = require('mysql');
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 const { Pokemon, Region, Tipo } = require("./models/index");
@@ -49,21 +49,19 @@ app.use(regionRouter);
 app.use(tipoRouter);
 app.use(errorController.Get404);
 
-const connection = mysql.createConnection({
+const connection = new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSER, process.env.MYSQLPASSWORD, {
   host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
+  dialect: 'mysql',
   port: process.env.MYSQLPORT,
 });
 
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
-  }
-  console.log('Connected to the MySQL database!');
-});
+connection.sync()
+  .then(() => {
+    console.log('Database synced successfully!');
+  })
+  .catch((err) => {
+    console.error('Error syncing the database:', err);
+  });
 
 connection
     .sync()
