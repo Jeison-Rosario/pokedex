@@ -1,9 +1,9 @@
 const { Sequelize } = require('sequelize');
 
-const connection = new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSER, process.env.MYSQLPASSWORD, {
-  dialect: 'mysql',
-  host: process.env.MYSQLHOST,
-  port: process.env.MYSQLPORT,
+const connection = new Sequelize('pokedex', 'root', '', {
+    dialect: 'mysql',
+    host: 'localhost',
+    port: 3306
 });
 
 module.exports = connection;

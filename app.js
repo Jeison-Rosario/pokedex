@@ -2,8 +2,7 @@ const express = require("express");
 const fs = require('fs');
 const path = require("path");
 const { engine } = require("express-handlebars");
-const { Sequelize } = require('sequelize');
-
+const connection = require("./context/appContext");
 
 const { Pokemon, Region, Tipo } = require("./models/index");
 
@@ -49,22 +48,11 @@ app.use(regionRouter);
 app.use(tipoRouter);
 app.use(errorController.Get404);
 
-const connection = new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSER, process.env.MYSQLPASSWORD, {
-  host: process.env.MYSQLHOST,
-  dialect: 'mysql',
-  port: process.env.MYSQLPORT,
-  logging: console.log,
-});
-
-const PORT = process.env.PORT || 3000;
-
-connection.sync()
-  .then(() => {
-    console.log('Database synced successfully!');
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+connection
+    .sync()
+    .then(() => {
+        app.listen(3000);
+    })
+    .catch((err) => {
+        console.error("Error al sincronizar la base de datos:", err);
     });
-  })
-  .catch((err) => {
-    console.error('Error syncing the database:', err);
-  });
