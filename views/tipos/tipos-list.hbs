@@ -1,0 +1,50 @@
+<section class="py-5 text-center container">
+  <div class="row py-lg-5">
+    <div class="col-lg-6 col-md-8 mx-auto">
+      <h1 class="fw-light">Tipos de pokemones</h1>
+      <p class="lead text-muted">Una aplicacion hecha por lideres de gimnasios para que los entrenadores pokemon puedan ver, agregar, modificar y/o eliminar datos sobre pokemones.</p>
+      <p>
+        <a href="/create-tipos" class="btn btn-primary my-2">Agregar nuevo tipo</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="d-flex justify-content-center mb-3">
+  <h1 class="fw-light fw-bold">Tipos agregados</h1>
+</div>
+
+<div class="album py-3 bg-light">
+  <div class="container">
+
+    <div class="row">
+
+      {{#if hasTipos}}
+
+        {{#each tipos as |tipo|}}
+
+          <div class="card text-center col-md-2 ms-3">
+            <div class="card-body">
+              <h5 class="card-title">{{tipo.tipo}}</h5>
+            </div>
+
+              <div class="d-flex justify-content-center">
+                  <div><a href="/edit-tipos/{{tipo.idTipo}}?edit=true" class="btn btn-warning me-1">Editar</a></div>
+
+                  <form class="form-inline" action="/delete-tipos" method="post">
+                    <input type="hidden" name="tipoId" value="{{tipo.idTipo}}" />
+                    <button type="submit" class="btn btn-danger ms-1">Eliminar</button>
+                  </form>
+              </div>
+          </div>
+
+        {{/each}}
+      {{else}}
+
+        <h1>No hay tipos agregados</h1>
+
+      {{/if}}
+
+    </div>
+  </div>
+</div>

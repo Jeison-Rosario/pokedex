@@ -1,0 +1,50 @@
+<section class="py-5 text-center container">
+  <div class="row py-lg-5">
+    <div class="col-lg-6 col-md-8 mx-auto">
+      <h1 class="fw-light">Regiones</h1>
+      <p class="lead text-muted">Una aplicacion hecha por lideres de gimnasios para que los entrenadores pokemon puedan ver, agregar, modificar y/o eliminar datos sobre pokemones.</p>
+      <p>
+        <a href="/create-regiones" class="btn btn-primary my-2">Agregar nueva region</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="d-flex justify-content-center mb-3">
+  <h1 class="fw-light fw-bold">Regiones agregadas</h1>
+</div>
+
+<div class="album py-3 bg-light">
+  <div class="container">
+
+    <div class="row">
+
+      {{#if hasRegiones}}
+
+        {{#each regiones as |region|}}
+
+          <div class="card text-center col-md-2 ms-3">
+            <div class="card-body">
+              <h5 class="card-title">{{region.region}}</h5>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div><a href="/edit-regiones/{{region.idRegion}}?edit=true" class="btn btn-warning me-1" >Editar</a></div>
+              <form class="form-inline" action="/delete-regiones" method="post">
+                <input type="hidden" name="regionId" value="{{region.idRegion}}" />
+                <button type="submit" class="btn btn-danger ms-1">Eliminar</button>
+              </form>
+            </div>
+
+          </div>
+
+        {{/each}}
+      {{else}}
+
+        <h1>No hay regiones agregadas</h1>
+
+      {{/if}}
+
+    </div>
+  </div>
+</div>

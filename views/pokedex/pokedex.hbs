@@ -1,0 +1,50 @@
+<section class="py-5 text-center container">
+<div class="row py-lg-5">
+<div class="col-lg-6 col-md-8 mx-auto">
+    <h1 class="fw-light">Pokedex</h1>
+    <p class="lead text-muted">Una aplicacion hecha por lideres de gimnasios para que los entrenadores pokemon puedan ver, agregar, modificar y/o eliminar datos sobre pokemones.</p>
+    <p>
+    <a href="/create-pokemones" class="btn btn-primary my-2">Agregar nuevo pokemon</a>
+    <a href="/create-regiones" class="btn btn-secondary my-2">Agregar nueva región</a>
+    <a href="/create-tipos" class="btn btn-secondary my-2">Agregar nuevo tipo de pokemon</a>
+    </p>
+</div>
+</div>
+</section>
+
+<div class="d-flex justify-content-center mb-3">
+    <h1 class="fw-light fw-bold">Pokemones agregados</h1>
+</div>
+
+<div class="album py-3 bg-light col-md-8  offset-2">
+<div class="container mx-auto">
+
+<div class="row  offset-1">
+
+    {{#if hasPokemones}}
+    {{#each pokemones as |pokemon|}}
+        <div class="card col-3 mb-3 ms-3">
+            <div class="card-body text-center">
+                <img src="{{pokemon.image}}" alt="Imagen de {{pokemon.name}}" class="pokemon-image col-md-5 offset-1 mb-2" />
+                <h5 class="card-title">Nombre: {{pokemon.name}}</h5>
+                <h6 class="card-subtitle text-muted">Tipo: {{pokemon.tipo}}</h6>
+                <p class="card-text">Región: {{pokemon.region}}</p>
+
+                <div class="mb-3 d-flex justify-content-center">
+                    <div><a href="/edit-pokemones/{{pokemon.id}}?edit=true" class="btn btn-warning me-1">Editar</a></div>
+
+                    <form id="form-delete" class="form-inline" action="/delete-pokemones" method="post">
+                        <input type="hidden" name="pokemonId" value="{{pokemon.id}}" />
+                        <button type="submit" id="delete-pokemon" class="btn btn-danger ms-1">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+{{else}}
+    <h1>No hay pokemones creados</h1>
+{{/if}}
+
+</div>
+</div>
+</div>

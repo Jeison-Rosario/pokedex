@@ -1,0 +1,76 @@
+<div class="row">
+
+<div class="col-md-3"></div>
+<div class="col-md-6">
+
+    {{#if hasRegiones}}
+
+    <div class="card">
+    <div class="card-header bg-dark text-white">
+        {{#if editMode}}Edicion{{else}}Creacion{{/if}} de pokemones
+    </div>
+    <div class="card-body">
+
+    <form method="POST" enctype="multipart/form-data" action="{{#if editMode}}/edit-pokemones{{else}}/create-pokemones{{/if}}">
+    <div class="mb-3">
+        <label for="image" class="form-label">Imagen</label>
+        <input type="file" class="form-control" id="image" name="pokemonImage" />
+    
+        {{#if editMode}}
+            {{#if pokemon.imagePokemon}}
+                <div>
+                    <img src="{{pokemon.imagePokemon}}" alt="Imagen de {{pokemon.namePokemon}}" class="pokemon-image" />
+                </div>
+            {{/if}}
+        {{/if}}
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="name" name="pokemonName" value="{{#if editMode}}{{pokemon.namePokemon}}{{/if}}" />
+    </div>
+
+    <div class="mb-3">
+    <label for="region" class="form-label">Región: </label>
+    <select class="form-select" id="region" name="regionPokemonId" required>
+        <option value=""{{#unless editMode}}selected{{/unless}}>Seleccione una opción</option>
+        {{#each regiones as |region|}}
+            <option value="{{region.idRegion}}" {{#if (equalValue region.id ../pokemon.regionId)}}selected{{/if}}>{{region.region}}</option>
+        {{/each}}
+    </select>
+</div>
+
+<div class="mb-3">
+    <label for="tipo" class="form-label">Tipo: </label>
+    <select class="form-select" id="tipo" name="tipoPokemonId" required>
+        <option value=""{{#unless editMode}}selected{{/unless}}>Seleccione una opción</option>
+        {{#each tipos as |tipo|}}
+            <option value="{{tipo.idTipo}}" {{#if (equalValue tipo.id ../pokemon.tipoId)}}selected{{/if}}>{{tipo.tipo}}</option>
+        {{/each}}
+    </select>
+</div>
+
+    {{#if editMode}}
+        <input type="hidden" name="pokemonId" value="{{pokemon.idPokemon}}" />
+    {{/if}}
+
+    <button type="submit" class="btn btn-primary">{{#if editMode}}Editar{{else}}Crear{{/if}}</button>
+    <a href="/" type="button" class="btn btn-warning">Volver atrás</a>
+</form>
+
+    </div>
+    </div>
+
+    {{else}}
+
+    <h2>No hay regiones o tipos agregados.</h2>
+    <h5>Para agregar un pokemon, primero debe agregar una región y un tipo.</h5>
+    <a href="/create-regiones" class="btn btn-primary mt-2">Agregar nueva región</a>
+    <a href="/create-tipos" class="btn btn-primary mt-2">Agregar nuevo tipo</a>
+
+    {{/if}}
+
+</div>
+<div class="col-md-6"></div>
+
+</div>
