@@ -2,7 +2,6 @@ const express = require("express");
 const fs = require('fs');
 const path = require("path");
 const { engine } = require("express-handlebars");
-require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
 

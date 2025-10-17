@@ -1,4 +1,3 @@
-require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
 const connection = new Sequelize(process.env.MYSQLDATABASE, process.env.MYSQLUSER, process.env.MYSQLPASSWORD, {
