@@ -1,51 +1,19 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="icon" type="image/png" href="/uploads/default.png">
-    <title>{{pageTitle}}</title>
-</head>
-
-<body>
-
-<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-<div class="container-fluid">
-    <a class="navbar-brand" href="/">Pokedex</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-        <li class="nav-item">
-        <a class="nav-link {{#if homeActive}}active{{/if}}" aria-current="page" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link {{#if pokemonActive}}active{{/if}}" href="/pokemones-list">Pokemones</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link {{#if regionActive}}active{{/if}}" href="/regiones-list">Regiones</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link {{#if tipoActive}}active{{/if}}" href="/tipos-list">Tipos de pokemones</a>
-        </li>
-    </ul>
-    </div>
-</div>
-</nav>
-
-<main class="container">
-
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Pokédex académica: explora Pokémon, filtra por región y tipo y busca por nombre.">
+<title>{{pageTitle}}</title>
+<link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css"><link rel="stylesheet" href="/assets/css/style.css?v=20261019-1">
+<link rel="icon" href="/assets/images/pokemon-placeholder.svg" type="image/svg+xml">
+</head><body>
+<a class="visually-hidden-focusable" href="#contenido">Saltar al contenido</a>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4" aria-label="Navegación principal"><div class="container">
+<a class="navbar-brand fw-bold" href="/">Pokédex<span class="text-danger">.</span></a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Abrir menú"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="navbarCollapse"><ul class="navbar-nav ms-auto"><li class="nav-item"><a class="nav-link {{#if homeActive}}active{{/if}}" href="/">Explorar</a></li><li class="nav-item"><a class="nav-link {{#if pokemonActive}}active{{/if}}" href="/pokemones-list">Pokémon</a></li><li class="nav-item"><a class="nav-link {{#if regionActive}}active{{/if}}" href="/regiones-list">Regiones</a></li><li class="nav-item"><a class="nav-link {{#if tipoActive}}active{{/if}}" href="/tipos-list">Tipos</a></li></ul></div>
+</div></nav>
+<main class="container pb-5" id="contenido">
+{{#if isAdmin}}<div class="alert alert-success d-flex flex-wrap gap-2 justify-content-between align-items-center"><span>Sesión de administrador activa.</span><form action="/admin/logout" method="post" class="m-0"><input type="hidden" name="_csrf" value="{{csrfToken}}"><button class="btn btn-sm btn-outline-dark" type="submit">Cerrar sesión</button></form></div>{{else}}{{#if adminEnabled}}<p class="text-end"><a href="/admin/login">Acceso de administrador</a></p>{{/if}}{{/if}}
+{{#unless canManage}}{{#if demoMode}}<div class="alert alert-light border" role="status">Demo de solo lectura: explora, busca y filtra Pokémon.</div>{{/if}}{{/unless}}
 {{{body}}}
-
-</main>
-
-<div class="glasp-extension-toaster" style="display: block; width: 320px; margin: unset; padding: unset; border: unset; border-radius: unset; outline: unset; background-color: unset; box-shadow: unset; position: fixed; top: 40px; right: 24px; z-index: 9999;"></div>
-<div class="glasp-extension" style="display: block; width: unset; margin: unset; padding: unset; border: unset; border-radius: unset; outline: unset; background-color: unset; box-shadow: unset; position: fixed; bottom: 16px; right: 16px; z-index: 9999;"></div>
-<div id="c4g-content-root" class="c4g-widget" data-darkreader-mode="dynamic" data-darkreader-scheme="dark"><meta name="darkreader" content="7a27c784220541948485ff8ba845e969"></div>
-<div id="monica-content-root" class="monica-widget" style="pointer-events: auto;"></div>
-</body>
-
-</html>
+</main><footer class="border-top py-3"><div class="container small text-muted">Proyecto académico de Jeison Rosario. Pokémon y sus personajes pertenecen a sus respectivos titulares.</div></footer>
+<script src="/assets/js/bootstrap/bootstrap.bundle.min.js"></script></body></html>
