@@ -13,8 +13,7 @@ exports.GetRegionesList = (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error al obtener las regiones"); 
+        next(err); 
       });
 };
 
@@ -32,7 +31,7 @@ exports.GetRegionesList = (req, res, next) => {
             });
         })
         .catch((err) => {
-            console.error("Error al obtener regiones:", err);
+            next(err);
         });
 };
 
@@ -44,8 +43,7 @@ exports.PostCreateRegiones = (req, res, next) => {
         res.redirect("/regiones-list");
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error al crear la región");
+        next(err);
       });
 };
 
@@ -72,8 +70,7 @@ exports.GetEditRegiones = (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error al obtener la región para editar");
+        next(err);
       });
 };
 
@@ -86,8 +83,7 @@ exports.PostEditRegiones = (req, res, next) => {
         res.redirect("/regiones-list");
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error al editar la región");
+        next(err);
       });
 };
 
@@ -103,7 +99,6 @@ exports.PostDeleteRegiones = (req, res, next) => {
         return res.redirect("/regiones-list");
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error al eliminar la región");
+        next(err);
       });
 };

@@ -1,33 +1,8 @@
-<div class="row">
-
-<div class="col-md-3"></div>
-<div class="col-md-6">
-
-    <div class="card">
-    <div class="card-header bg-dark text-white">
-        {{#if editMode}}Edicion{{else}}Creacion{{/if}} de Tipos
-    </div>
-    <div class="card-body">
-
-        <form method="POST" action="{{#if editMode}}/edit-tipos{{else}}/create-tipos{{/if}}">
-        <div class="mb-3">
-        <label for="name" class="form-label">Tipo de pokemon</label>
-        <input type="text" class="form-control" id="name" name="Name" value="{{#if editMode}}{{tipo.tipo}}{{/if}}" />
-        </div>
-
-        {{#if editMode}}
-
-        <input type="hidden" name="tipoId" value="{{tipo.idTipo}}">
-        {{/if}}
-
-        <button type="submit" class="btn btn-primary">{{#if editMode}}Editar{{else}}Crear{{/if}}</button>
-        <a href="/" type="button" class="btn btn-warning">volver atras</a>
-    </form>
-
-    </div>
-    </div>
-
-</div>
-<div class="col-md-6"></div>
-
-</div>
+<section class="row justify-content-center py-4"><div class="col-12 col-md-7 col-lg-6">
+<h1 class="h3">{{#if editMode}}Editar{{else}}Agregar{{/if}} tipo</h1>
+<form method="post" action="{{#if editMode}}/edit-tipos{{else}}/create-tipos{{/if}}">
+<input type="hidden" name="_csrf" value="{{csrfToken}}">
+<label for="name" class="form-label">Nombre</label><input class="form-control mb-3" id="name" name="Name" maxlength="50" required value="{{#if editMode}}{{tipo.tipo}}{{/if}}">
+{{#if editMode}}<input type="hidden" name="tipoId" value="{{tipo.idTipo}}">{{/if}}
+<button class="btn btn-primary" type="submit">Guardar</button> <a class="btn btn-outline-secondary" href="/tipos-list">Volver</a>
+</form></div></section>

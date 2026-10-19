@@ -1,7 +1,7 @@
 const pokemon = require("../models/pokemon");
 const region = require("../models/region");
 const tipo = require("../models/tipo");
-const upload = require("../middlewares/upload");
+
 
 exports.GetPokemones = (req, res, next) => {
   pokemon.findAll({
@@ -24,8 +24,7 @@ exports.GetPokemones = (req, res, next) => {
       });
   })
   .catch((err) => {
-      console.log(err);
-      res.status(500).send("Error al obtener los pokemones"); 
+      next(err); 
   });
 };
 
@@ -50,13 +49,12 @@ exports.GetCreatePokemones = (req, res, next) => {
           });
       })
       .catch((err) => {
-          console.error("Error al obtener pokemones:", err);
+          next(err);
       });
 };
 
 exports.PostCreatePokemones = (req, res, next) => {
-  console.log("Datos recibidos:", req.body);
-  console.log("Archivo recibido:", req.file); 
+ 
 
   const pokemonName = req.body.pokemonName; 
   const pokemonRegion = req.body.regionPokemonId;  
@@ -66,7 +64,7 @@ exports.PostCreatePokemones = (req, res, next) => {
       return res.status(400).send("Por favor, selecciona una región y un tipo.");
   }
 
-  const imagePokemon = req.file ? `/uploads/${req.file.filename}` : "/uploads/default.png";
+  const imagePokemon = req.file ? `/uploads/${req.file.filename}` : "/assets/images/pokemon-placeholder.svg";
 
   pokemon.create({
       namePokemon: pokemonName,
@@ -78,8 +76,7 @@ exports.PostCreatePokemones = (req, res, next) => {
       res.redirect("/pokemones-list"); 
   })
   .catch((err) => {
-      console.log("Error al crear el Pokémon:", err);
-      res.status(500).send("Error al crear el Pokémon");
+      next(err);
   });
 };
 
@@ -97,7 +94,8 @@ exports.GetEditPokemones = (req, res, next) => {
         tipo.findAll()
     ])
     .then(([pokemonData, regionesData, tiposData]) => {
-        const pokemon = pokemonData ? pokemonData.dataValues : null;
+        if (!pokemonData) return res.status(404).send("Pokémon no encontrado.");
+        const pokemon = pokemonData.dataValues;
         const regiones = regionesData.map((r) => r.dataValues);
         const tipos = tiposData.map((t) => t.dataValues);
 
@@ -112,23 +110,23 @@ exports.GetEditPokemones = (req, res, next) => {
         });
     })
     .catch((err) => {
-        console.error("Error al obtener el Pokémon o regiones:", err);
-        res.status(500).send("Error al obtener los datos");
+        next(err);
     });
 };
 
-exports.PostEditPokemones = (req, res, next) => {
-  upload.single('pokemonImage')(req, res, function (err) {
-      if (err) {
-          return res.status(500).send("Error al subir la imagen.");
-      }
+exports.PostEditPokemones = async (req, res, next) => {
+
 
       const Name = req.body.pokemonName;
       const region = req.body.regionPokemonId;
       const tipo = req.body.tipoPokemonId;
       const pokemonId = req.body.pokemonId;
       
-      const imagePokemon = req.file ? `/uploads/${req.file.filename}`:null;
+      let current;
+      try { current = await pokemon.findByPk(pokemonId); }
+      catch (error) { return next(error); }
+      if (!current) return res.status(404).send("Pokémon no encontrado.");
+      const imagePokemon = req.file ? `/uploads/${req.file.filename}` : current.imagePokemon;
 
       pokemon.update(
         { 
@@ -141,10 +139,8 @@ exports.PostEditPokemones = (req, res, next) => {
       )
       .then(() => res.redirect("/pokemones-list"))
       .catch(err => {
-          console.log(err);
-          res.status(500).send("Error al editar el pokemon");
+          next(err);
       });
-  });
 };
 
 exports.PostDeletePokemones = (req, res, next) => {
@@ -155,7 +151,6 @@ exports.PostDeletePokemones = (req, res, next) => {
         return res.redirect("/pokemones-list");
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error al eliminar el pokemon");
+        next(err);
       });
 };

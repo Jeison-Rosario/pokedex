@@ -13,8 +13,7 @@ exports.GetTiposList = (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error al obtener los tipos"); 
+        next(err); 
       });
 };
 
@@ -32,7 +31,7 @@ exports.GetCreateTipos = (req, res, next) => {
             });
         })
         .catch((err) => {
-            console.error("Error al obtener los tipos:", err);
+            next(err);
         });
 };
 
@@ -44,8 +43,7 @@ exports.PostCreateTipos = (req, res, next) => {
         res.redirect("/tipos-list");
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).send("Error al crear la región");
+        next(err);
       });
 };
 
@@ -71,8 +69,7 @@ exports.GetEditTipos = (req, res, next) => {
             });
         })
         .catch((err) => {
-            console.log(err);
-            res.status(500).send("Error al obtener el tipo para editar");
+            next(err);
         });
 };
 
@@ -85,8 +82,7 @@ exports.PostEditTipos = (req, res, next) => {
             res.redirect("/tipos-list");
         })
         .catch((err) => {
-            console.log(err);
-            res.status(500).send("Error al editar el tipo");
+            next(err);
         });
 };
 
@@ -102,7 +98,6 @@ exports.PostDeleteTipos = (req, res, next) => {
             return res.redirect("/tipos-list");
         })
         .catch((err) => {
-            console.log(err);
-            res.status(500).send("Error al eliminar el tipo");
+            next(err);
         });
 };

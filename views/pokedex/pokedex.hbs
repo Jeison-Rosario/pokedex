@@ -1,50 +1,19 @@
-<section class="py-5 text-center container">
-<div class="row py-lg-5">
-<div class="col-lg-6 col-md-8 mx-auto">
-    <h1 class="fw-light">Pokedex</h1>
-    <p class="lead text-muted">Una aplicacion hecha por lideres de gimnasios para que los entrenadores pokemon puedan ver, agregar, modificar y/o eliminar datos sobre pokemones.</p>
-    <p>
-    <a href="/create-pokemones" class="btn btn-primary my-2">Agregar nuevo pokemon</a>
-    <a href="/create-regiones" class="btn btn-secondary my-2">Agregar nueva región</a>
-    <a href="/create-tipos" class="btn btn-secondary my-2">Agregar nuevo tipo de pokemon</a>
-    </p>
-</div>
-</div>
+<section class="catalog-heading py-4">
+  <p class="text-uppercase small fw-bold text-danger mb-2">Explora el catálogo</p>
+  <h1>Pokédex</h1>
+  <p class="lead text-muted">Busca tus Pokémon y descubre su tipo y región.</p>
+  {{#if canManage}}<div class="d-flex flex-wrap gap-2 mb-3"><a href="/create-pokemones" class="btn btn-primary">Agregar Pokémon</a><a href="/create-regiones" class="btn btn-outline-secondary">Agregar región</a><a href="/create-tipos" class="btn btn-outline-secondary">Agregar tipo</a></div>{{/if}}
+  <form method="get" action="/" class="catalog-filters">
+    <div><label for="search" class="form-label">Nombre</label><input id="search" name="search" class="form-control" value="{{search}}" placeholder="Por ejemplo, Pikachu" maxlength="80"></div>
+    <div><label for="filter-region" class="form-label">Región</label><select id="filter-region" name="region" class="form-select"><option value="">Todas las regiones</option>{{#each regiones}}<option value="{{idRegion}}" {{#if selected}}selected{{/if}}>{{region}}</option>{{/each}}</select></div>
+    <div><label for="filter-type" class="form-label">Tipo</label><select id="filter-type" name="tipo" class="form-select"><option value="">Todos los tipos</option>{{#each tipos}}<option value="{{idTipo}}" {{#if selected}}selected{{/if}}>{{tipo}}</option>{{/each}}</select></div>
+    <div class="d-flex gap-2 align-items-end"><button type="submit" class="btn btn-primary">Buscar</button><a href="/" class="btn btn-outline-secondary">Limpiar</a></div>
+  </form>
 </section>
-
-<div class="d-flex justify-content-center mb-3">
-    <h1 class="fw-light fw-bold">Pokemones agregados</h1>
-</div>
-
-<div class="album py-3 bg-light col-md-8  offset-2">
-<div class="container mx-auto">
-
-<div class="row  offset-1">
-
-    {{#if hasPokemones}}
-    {{#each pokemones as |pokemon|}}
-        <div class="card col-3 mb-3 ms-3">
-            <div class="card-body text-center">
-                <img src="{{pokemon.image}}" alt="Imagen de {{pokemon.name}}" class="pokemon-image col-md-5 offset-1 mb-2" />
-                <h5 class="card-title">Nombre: {{pokemon.name}}</h5>
-                <h6 class="card-subtitle text-muted">Tipo: {{pokemon.tipo}}</h6>
-                <p class="card-text">Región: {{pokemon.region}}</p>
-
-                <div class="mb-3 d-flex justify-content-center">
-                    <div><a href="/edit-pokemones/{{pokemon.id}}?edit=true" class="btn btn-warning me-1">Editar</a></div>
-
-                    <form id="form-delete" class="form-inline" action="/delete-pokemones" method="post">
-                        <input type="hidden" name="pokemonId" value="{{pokemon.id}}" />
-                        <button type="submit" id="delete-pokemon" class="btn btn-danger ms-1">Eliminar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    {{/each}}
-{{else}}
-    <h1>No hay pokemones creados.</h1>
-{{/if}}
-
-</div>
-</div>
-</div>
+<p class="text-muted">Resultados: {{total}}</p>
+{{> pokemon-cards}}
+<nav class="d-flex flex-wrap gap-3 align-items-center justify-content-center my-4" aria-label="Páginas del catálogo">
+  {{#if previousUrl}}<a class="btn btn-outline-secondary" href="{{previousUrl}}">Anterior</a>{{/if}}
+  <span>Página {{page}} de {{pages}}</span>
+  {{#if nextUrl}}<a class="btn btn-outline-secondary" href="{{nextUrl}}">Siguiente</a>{{/if}}
+</nav>
