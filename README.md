@@ -42,6 +42,7 @@ Para desarrollo, `npm run dev`. Para probar el CRUD local sin login, usar solame
 | `MYSQLHOST`, `MYSQLPORT` | Host y puerto de MySQL/MariaDB |
 | `MYSQLDATABASE`, `MYSQLUSER`, `MYSQLPASSWORD` | Base y acceso exclusivo del proyecto |
 | `IP` / `HOST`, `PORT` | Dirección y puerto de escucha asignados por el alojamiento; defecto local 127.0.0.1:3000 |
+| `BASE_PATH` | Vacío por defecto; `/pokedex` para convivir con BookApp bajo otra ruta |
 | `DEMO_MODE` | true por defecto: visitantes solo consultan; administrador autenticado puede gestionar |
 | `ADMIN_ENABLED` | false por defecto: acceso de administrador desactivado |
 | `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET` | Valores privados generados con `npm run admin:setup` |
@@ -49,9 +50,9 @@ Para desarrollo, `npm run dev`. Para probar el CRUD local sin login, usar solame
 
 ## Administrador opcional
 
-En el servidor HTTPS, `npm run admin:setup` solicita usuario y contraseña sin mostrarla, guarda el hash y el secreto de sesión en el `.env` con permisos 600 y conserva la configuración MySQL. Después hay que reiniciar y abrir `/admin/login`. Consultar [la guía de administrador](docs/ADMIN.md).
+En el servidor HTTPS, `npm run admin:setup` solicita usuario y contraseña sin mostrarla, guarda el hash y el secreto de sesión en el `.env` con permisos 600 y conserva la configuración MySQL. Después hay que reiniciar y abrir `BASE_PATH` + `/admin/login` (por ejemplo, `/pokedex/admin/login`). Consultar [la guía de administrador](docs/ADMIN.md).
 
-El cookie `pokedex.sid` es independiente del usado por BookApp. Las sesiones viven una hora en memoria con máximo de 100 entradas; al reiniciar se cierran. La configuración está pensada para una sola instancia y un administrador.
+La cookie `pokedex.sid` es independiente de la usada por BookApp y se limita a `BASE_PATH/` cuando se utiliza un prefijo. Las sesiones viven una hora en memoria con máximo de 100 entradas; al reiniciar se cierran. La configuración está pensada para una sola instancia y un administrador.
 
 ## Organización
 
@@ -76,13 +77,15 @@ npm test
 
 Las pruebas locales usan datos simulados para comprobar renderizado HTTP, filtros combinados, paginación, recursos del catálogo, restricciones de visitantes, validaciones de modelos, login, CSRF, CRUD, cargas de imágenes, conservación de imagen y logout. No envían correos ni consumen recursos de alwaysdata.
 
+Las pruebas de BASE_PATH cubren recursos, enlaces, filtros, formularios, redirecciones, cookies, login/logout y subida de imágenes con el prefijo conservado o recortado por un proxy.
+
 El workflow incluido prepara MySQL 8 y Node.js 22 para una comprobación adicional del seed, asociaciones, filtros, restricción de borrado y rechazo de un segundo seed. Solo esa prueba requiere `RUN_MYSQL_TESTS=true` y una base de pruebas preparada; no ejecutar contra una base con datos importantes.
 
 ## Estado de despliegue
 
-Preparado para pruebas, **sin URL de demo publicada todavía**. [Plan de despliegue](docs/DEPLOYMENT.md). No añadir una segunda aplicación a la cuenta de BookApp hasta aclarar su aviso de límites de recursos. No sustituir el sitio, `.env` ni la base de BookApp.
+Preparado para pruebas, **sin URL de demo publicada todavía**. [Plan de despliegue](docs/DEPLOYMENT.md). El soporte para `/pokedex/` permite preparar una prueba controlada en un sitio independiente; vigilar el aviso de recursos de la cuenta al desplegar. No sustituir el sitio, `.env` ni la base de BookApp.
 
-No se realizó comprobación visual en navegador ni prueba local contra MySQL real en esta preparación. La revisión en móvil y las pruebas sobre el alojamiento deben completarse al publicar.
+El propietario comprobó catálogo, filtros, diseño móvil y administrador contra MySQL local. El soporte adicional de BASE_PATH se verificó mediante pruebas HTTP automatizadas; su publicación bajo /pokedex/ sigue pendiente.
 
 ## Límites
 

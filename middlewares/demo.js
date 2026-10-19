@@ -1,3 +1,4 @@
+const { appUrl } = require('../util/urls');
 function demoGuard(enabled, adminEnabled = false) {
   return (req, res, next) => {
     const isAdmin = adminEnabled && req.session?.isAdmin === true;
@@ -10,7 +11,7 @@ function demoGuard(enabled, adminEnabled = false) {
       return res.status(403).send('Solo el administrador puede realizar esta operación.');
     }
     if (!canManage && /^\/(create|edit)-/.test(req.path)) {
-      return adminEnabled ? res.redirect('/admin/login') : res.status(403).send('Demo de solo lectura.');
+      return adminEnabled ? res.redirect(appUrl('/admin/login')) : res.status(403).send('Demo de solo lectura.');
     }
     next();
   };

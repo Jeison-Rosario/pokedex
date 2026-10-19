@@ -1,3 +1,4 @@
+const { appUrl } = require('../util/urls');
 const express = require('express');
 const config = require('../config');
 const { verifyPassword } = require('../services/passwordService');
@@ -29,7 +30,7 @@ router.use((req, res, next) => {
   next();
 });
 router.get('/login', (req, res) => {
-  if (req.session.isAdmin) return res.redirect('/');
+  if (req.session.isAdmin) return res.redirect(appUrl('/'));
   res.render('admin/login', { pageTitle: 'Acceso de administrador', csrfToken: csrfToken(req), adminEnabled: true });
 });
 router.post('/login', csrfProtection, limitLogin, async (req, res, next) => {
@@ -44,7 +45,7 @@ router.post('/login', csrfProtection, limitLogin, async (req, res, next) => {
       if (err) return next(err);
       req.session.isAdmin = true;
       req.session.csrf = require('crypto').randomBytes(32).toString('hex');
-      req.session.save(error => error ? next(error) : res.redirect('/'));
+      req.session.save(error => error ? next(error) : res.redirect(appUrl('/')));
     });
   } catch (error) { next(error); }
   finally { activeHashes--; }
@@ -52,8 +53,8 @@ router.post('/login', csrfProtection, limitLogin, async (req, res, next) => {
 router.post('/logout', csrfProtection, (req, res, next) => {
   req.session.destroy(err => {
     if (err) return next(err);
-    res.clearCookie('pokedex.sid', { path: '/', httpOnly: true, sameSite: 'strict', secure: config.admin.cookieSecure });
-    res.redirect('/');
+    res.clearCookie('pokedex.sid', { path: config.cookiePath, httpOnly: true, sameSite: 'strict', secure: config.admin.cookieSecure });
+    res.redirect(appUrl('/'));
   });
 });
 module.exports = router;

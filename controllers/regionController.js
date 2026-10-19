@@ -1,3 +1,4 @@
+const { appUrl } = require('../util/urls');
 const region = require("../models/region");
 
 exports.GetRegionesList = (req, res, next) => {
@@ -40,7 +41,7 @@ exports.PostCreateRegiones = (req, res, next) => {
   
     region.create({ region: regionName }) 
       .then((result) => {
-        res.redirect("/regiones-list");
+        res.redirect(appUrl("/regiones-list"));
       })
       .catch((err) => {
         next(err);
@@ -52,14 +53,14 @@ exports.GetEditRegiones = (req, res, next) => {
     const regionId = req.params.regionId;  
   
     if (!edit) {
-      return res.redirect("/regiones-list");
+      return res.redirect(appUrl("/regiones-list"));
     }
   
     region.findOne({ where: { idRegion: regionId } })  
       .then((result) => {
 
         if (!result) {
-          return res.redirect("/regiones");
+          return res.redirect(appUrl("/regiones-list"));
         }
   
         res.render("regiones/create-regiones", {
@@ -80,7 +81,7 @@ exports.PostEditRegiones = (req, res, next) => {
   
     region.update({ region: regionName }, { where: { idRegion: regionId } })
       .then((result) => {
-        res.redirect("/regiones-list");
+        res.redirect(appUrl("/regiones-list"));
       })
       .catch((err) => {
         next(err);
@@ -96,7 +97,7 @@ exports.PostDeleteRegiones = (req, res, next) => {
 
     region.destroy({ where: { idRegion: regionId } })
       .then((result) => {
-        return res.redirect("/regiones-list");
+        return res.redirect(appUrl("/regiones-list"));
       })
       .catch((err) => {
         next(err);

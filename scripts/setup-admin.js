@@ -33,7 +33,7 @@ async function main() {
     await fs.writeFile(temporary, content, { mode: 0o600, flag: 'wx' });
     await fs.rename(temporary, file);
   } finally { await fs.unlink(temporary).catch(() => {}); }
-  console.log('Administrador configurado en .env. Reinicia el sitio y entra por HTTPS a /admin/login.');
+  console.log('Administrador configurado en .env. Reinicia el sitio y entra por HTTPS a BASE_PATH + /admin/login.');
   console.log('Se conservó la configuración MySQL.');
 }
 main().catch(() => { console.error('No se pudo configurar el administrador. Comprueba usuario, contraseñas y permisos del archivo .env.'); process.exitCode = 1; });

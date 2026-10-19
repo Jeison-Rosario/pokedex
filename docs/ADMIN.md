@@ -10,9 +10,9 @@ Primero preparar una base exclusiva de Pokédex y su `.env`. En el servidor HTTP
 npm run admin:setup
 ```
 
-El asistente solicita usuario (3–60 letras, números, puntos o guiones) y una contraseña de 12–256 caracteres dos veces. No muestra ni guarda la contraseña en texto plano. Conserva las variables MySQL, genera el hash scrypt y un secreto de sesión y escribe `.env` con permisos 600. También configura `TRUST_PROXY=true` y `COOKIE_SECURE=true` para HTTPS detrás del proxy. No compartir ese archivo.
+El asistente solicita usuario (3–60 letras, números, puntos o guiones) y una contraseña de 12–256 caracteres dos veces. No muestra ni guarda la contraseña en texto plano. Conserva las variables MySQL, genera el hash scrypt y un secreto de sesión y escribe `.env` con permisos 600. También configura `TRUST_PROXY=true` y `COOKIE_SECURE=true` para HTTPS detrás del proxy. No compartir ese archivo. El asistente conserva BASE_PATH.
 
-Reiniciar el sitio y abrir `/admin/login` en su dirección HTTPS propia. No introducir las credenciales de BookApp, MySQL o alwaysdata: elegir credenciales nuevas para Pokédex. Si el panel tiene variables de administrador anteriores, actualizarlas o retirarlas de allí para que no sobrescriban el `.env`.
+Reiniciar el sitio y abrir `BASE_PATH` + `/admin/login` en su dirección HTTPS (por ejemplo, `https://bookapp.alwaysdata.net/pokedex/admin/login`). No introducir las credenciales de BookApp, MySQL o alwaysdata: elegir credenciales nuevas para Pokédex. Si el panel tiene variables de administrador anteriores, actualizarlas o retirarlas de allí para que no sobrescriban el `.env`.
 
 El usuario MySQL necesita SELECT, INSERT, UPDATE y DELETE en la base de Pokédex para gestionar datos. La inicialización inicial también necesita crear tablas.
 
@@ -26,7 +26,7 @@ El usuario MySQL necesita SELECT, INSERT, UPDATE y DELETE en la base de Pokédex
 6. Eliminar el Pokémon de prueba y después su región y tipo.
 7. Cerrar sesión. En una pestaña privada, solo deben verse catálogo, filtros y listados; los cambios se rechazan.
 
-Las cookies son HttpOnly, SameSite=Strict y Secure en HTTPS. La sesión se renueva al entrar y se invalida al salir. Los formularios requieren CSRF y la subida guarda archivos solo después de validar el token y la firma de imagen.
+La cookie pokedex.sid se limita a BASE_PATH/ (o / cuando no hay prefijo). Las cookies son HttpOnly, SameSite=Strict y Secure en HTTPS. La sesión se renueva al entrar y se invalida al salir. Los formularios requieren CSRF y la subida guarda archivos solo después de validar el token y la firma de imagen.
 
 Las sesiones están en memoria (máximo 100, duración de una hora). Reiniciar cierra las sesiones y reinicia los límites de intentos. Cinco intentos por IP en 15 minutos y un límite global restringen el login. Un exceso devuelve 429. Un formulario con sesión o token caducado requiere recarga y nuevo login.
 

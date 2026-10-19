@@ -1,3 +1,4 @@
+const { appUrl } = require('../util/urls');
 const tipo = require("../models/tipo");
 
 exports.GetTiposList = (req, res, next) => {
@@ -40,7 +41,7 @@ exports.PostCreateTipos = (req, res, next) => {
   
     tipo.create({ tipo: tipoName }) 
       .then((result) => {
-        res.redirect("/tipos-list");
+        res.redirect(appUrl("/tipos-list"));
       })
       .catch((err) => {
         next(err);
@@ -52,13 +53,13 @@ exports.GetEditTipos = (req, res, next) => {
     const tipoId = req.params.tipoId;  
 
     if (!edit) {
-        return res.redirect("/tipos-list");
+        return res.redirect(appUrl("/tipos-list"));
     }
 
     tipo.findOne({ where: { idTipo: tipoId } })
         .then((result) => {
             if (!result) { 
-                return res.redirect("/tipos-list");
+                return res.redirect(appUrl("/tipos-list"));
             }
 
             res.render("tipos/create-tipos", {
@@ -79,7 +80,7 @@ exports.PostEditTipos = (req, res, next) => {
 
     tipo.update({ tipo: tipoName }, { where: { idTipo: tipoId } })  
         .then((result) => {
-            res.redirect("/tipos-list");
+            res.redirect(appUrl("/tipos-list"));
         })
         .catch((err) => {
             next(err);
@@ -95,7 +96,7 @@ exports.PostDeleteTipos = (req, res, next) => {
 
     tipo.destroy({ where: { idTipo: tipoId } })
         .then((result) => {
-            return res.redirect("/tipos-list");
+            return res.redirect(appUrl("/tipos-list"));
         })
         .catch((err) => {
             next(err);

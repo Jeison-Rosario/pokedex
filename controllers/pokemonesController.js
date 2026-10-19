@@ -1,3 +1,4 @@
+const { appUrl } = require('../util/urls');
 const pokemon = require("../models/pokemon");
 const region = require("../models/region");
 const tipo = require("../models/tipo");
@@ -73,7 +74,7 @@ exports.PostCreatePokemones = (req, res, next) => {
       imagePokemon: imagePokemon,
   })
   .then(() => {
-      res.redirect("/pokemones-list"); 
+      res.redirect(appUrl("/pokemones-list")); 
   })
   .catch((err) => {
       next(err);
@@ -137,7 +138,7 @@ exports.PostEditPokemones = async (req, res, next) => {
         }, 
         { where: { idPokemon: pokemonId } }
       )
-      .then(() => res.redirect("/pokemones-list"))
+      .then(() => res.redirect(appUrl("/pokemones-list")))
       .catch(err => {
           next(err);
       });
@@ -148,7 +149,7 @@ exports.PostDeletePokemones = (req, res, next) => {
 
     pokemon.destroy({ where: { idPokemon: pokemonId } })
       .then((result) => {
-        return res.redirect("/pokemones-list");
+        return res.redirect(appUrl("/pokemones-list"));
       })
       .catch((err) => {
         next(err);
