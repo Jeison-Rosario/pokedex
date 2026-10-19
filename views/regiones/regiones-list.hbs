@@ -1,8 +1,8 @@
-<section class="py-4"><h1>Regiones</h1><p class="text-muted">Regiones disponibles en la Pokédex.</p>{{#if canManage}}<a href="/create-regiones" class="btn btn-primary mb-3">Agregar region</a>{{/if}}</section>
+<section class="py-4"><h1>Regiones</h1><p class="text-muted">Regiones disponibles en la Pokédex.</p>{{#if canManage}}<a href="{{@root.basePath}}/create-regiones" class="btn btn-primary mb-3">Agregar region</a>{{/if}}</section>
 <div class="info-grid">
 {{#each regiones as |item|}}
 <article class="card h-100"><div class="card-body"><h2 class="h5">{{item.region}}</h2>
-{{#if @root.canManage}}<div class="d-flex flex-wrap gap-2 mt-3"><a href="/edit-regiones/{{item.idRegion}}?edit=true" class="btn btn-outline-primary">Editar</a><form action="/delete-regiones" method="post"><input type="hidden" name="_csrf" value="{{@root.csrfToken}}"><input type="hidden" name="regionId" value="{{item.idRegion}}"><button type="submit" class="btn btn-outline-danger">Eliminar</button></form></div>{{/if}}
+{{#if @root.canManage}}<div class="d-flex flex-wrap gap-2 mt-3"><a href="{{@root.basePath}}/edit-regiones/{{item.idRegion}}?edit=true" class="btn btn-outline-primary">Editar</a><form action="{{@root.basePath}}/delete-regiones" method="post"><input type="hidden" name="_csrf" value="{{@root.csrfToken}}"><input type="hidden" name="regionId" value="{{item.idRegion}}"><button type="submit" class="btn btn-outline-danger">Eliminar</button></form></div>{{/if}}
 </div></article>
 {{else}}<p class="grid-message">No hay registros disponibles.</p>{{/each}}
 </div>

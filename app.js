@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require("path");
 const { engine } = require("express-handlebars");
 const config = require("./config");
+const { appUrl } = require("./util/urls");
+const { basePathMiddleware } = require("./middlewares/basePath");
 const session = require("express-session");
 const MemoryStore = require("memorystore")(session);
 const { csrfToken, csrfProtection } = require("./middlewares/csrf");
@@ -29,6 +31,7 @@ app.engine(
         extname: "hbs",
         helpers: {
             equalValue: compareHelpers.EqualValue,
+            url: appUrl,
         },
     })
 );
@@ -37,6 +40,7 @@ app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
 app.disable("x-powered-by");
+app.use(basePathMiddleware(config.basePath));
 if (config.trustProxy) app.set('trust proxy', 1);
 app.use((req, res, next) => {
     res.set('X-Content-Type-Options', 'nosniff');
@@ -62,7 +66,7 @@ if (config.admin.enabled) {
         name: 'pokedex.sid', secret: config.admin.secret,
         resave: false, saveUninitialized: false,
         store,
-        cookie: { httpOnly: true, secure: config.admin.cookieSecure, sameSite: 'strict', maxAge: 3600000 }
+        cookie: { path: config.cookiePath, httpOnly: true, secure: config.admin.cookieSecure, sameSite: 'strict', maxAge: 3600000 }
     }));
 }
 app.use(express.urlencoded({ extended: false, limit: '32kb' }));

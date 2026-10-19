@@ -9,6 +9,8 @@ function readConfig(env = process.env) {
     if (!Number.isInteger(value) || value < 1 || value > 65535) throw new Error(`${key} debe ser un puerto válido`);
     return value;
   };
+  const basePath = (env.BASE_PATH || '').replace(/\/+$/, '');
+  if (basePath && !/^(\/[a-zA-Z0-9_-]+)+$/.test(basePath)) throw new Error('BASE_PATH debe ser una ruta como /pokedex');
   const demoMode = bool('DEMO_MODE', true);
   const adminEnabled = bool('ADMIN_ENABLED', false);
   const required = ['MYSQLDATABASE', 'MYSQLUSER', 'MYSQLHOST'];
@@ -19,6 +21,7 @@ function readConfig(env = process.env) {
   if (adminEnabled && env.SESSION_SECRET.length < 32) throw new Error('SESSION_SECRET requiere al menos 32 caracteres');
   if (!demoMode && !adminEnabled && env.NODE_ENV === 'production') throw new Error('La escritura pública requiere ADMIN_ENABLED=true');
   return {
+    basePath, cookiePath: basePath ? basePath + '/' : '/',
     admin: { enabled: adminEnabled, username: env.ADMIN_USERNAME, passwordHash: env.ADMIN_PASSWORD_HASH,
       secret: env.SESSION_SECRET, cookieSecure: bool('COOKIE_SECURE', env.NODE_ENV === 'production') },
     trustProxy: bool('TRUST_PROXY', false),

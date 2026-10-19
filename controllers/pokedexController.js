@@ -1,3 +1,4 @@
+const { appUrl } = require('../util/urls');
 const { Op } = require('sequelize');
 const { Pokemon, Region, Tipo } = require('../models');
 const PAGE_SIZE = 24;
@@ -30,7 +31,7 @@ exports.GetPokedexList = async (req, res, next) => {
       if (search) query.set('search', search);
       if (regionId) query.set('region', String(regionId));
       if (tipoId) query.set('tipo', String(tipoId));
-      query.set('page', String(target)); return '/?' + query;
+      query.set('page', String(target)); return appUrl('/?' + query);
     };
     const pages = Math.max(1, Math.ceil(count / PAGE_SIZE));
     res.render('pokedex/pokedex', {

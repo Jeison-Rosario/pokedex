@@ -1,6 +1,6 @@
 <section class="py-4">
   <h1>Pokémon del catálogo</h1>
   <p class="text-muted">Consulta los registros y sus relaciones.</p>
-  {{#if canManage}}<a href="/create-pokemones" class="btn btn-primary mb-3">Agregar Pokémon</a>{{/if}}
+  {{#if canManage}}<a href="{{@root.basePath}}/create-pokemones" class="btn btn-primary mb-3">Agregar Pokémon</a>{{/if}}
 </section>
 {{> pokemon-cards}}

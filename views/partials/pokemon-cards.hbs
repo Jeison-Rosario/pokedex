@@ -2,14 +2,14 @@
 {{#each pokemones as |pokemon|}}
   <article class="card pokemon-card h-100">
     <div class="card-body d-flex flex-column">
-      <img src="{{pokemon.image}}" alt="Imagen de {{pokemon.name}}" class="pokemon-image mb-3" loading="lazy" width="220" height="220">
+      <img src="{{url pokemon.image}}" alt="Imagen de {{pokemon.name}}" class="pokemon-image mb-3" loading="lazy" width="220" height="220">
       <h2 class="h4 card-title">{{pokemon.name}}</h2>
       <p class="mb-2"><span class="type-tag">{{pokemon.tipo}}</span></p>
       <p class="text-muted">Región: {{pokemon.region}}</p>
       {{#if @root.canManage}}
       <div class="d-flex flex-wrap gap-2 mt-auto">
-        <a href="/edit-pokemones/{{pokemon.id}}?edit=true" class="btn btn-outline-primary">Editar</a>
-        <form action="/delete-pokemones" method="post">
+        <a href="{{@root.basePath}}/edit-pokemones/{{pokemon.id}}?edit=true" class="btn btn-outline-primary">Editar</a>
+        <form action="{{@root.basePath}}/delete-pokemones" method="post">
           <input type="hidden" name="_csrf" value="{{@root.csrfToken}}">
           <input type="hidden" name="pokemonId" value="{{pokemon.id}}">
           <button type="submit" class="btn btn-outline-danger">Eliminar</button>
