@@ -81,11 +81,57 @@ Las pruebas de BASE_PATH cubren recursos, enlaces, filtros, formularios, redirec
 
 El workflow incluido prepara MySQL 8 y Node.js 22 para una comprobación adicional del seed, asociaciones, filtros, restricción de borrado y rechazo de un segundo seed. Solo esa prueba requiere `RUN_MYSQL_TESTS=true` y una base de pruebas preparada; no ejecutar contra una base con datos importantes.
 
-## Estado de despliegue
+## Demo y despliegue
 
-Preparado para pruebas, **sin URL de demo publicada todavía**. [Plan de despliegue](docs/DEPLOYMENT.md). El soporte para `/pokedex/` permite preparar una prueba controlada en un sitio independiente; vigilar el aviso de recursos de la cuenta al desplegar. No sustituir el sitio, `.env` ni la base de BookApp.
+**[Abrir Pokédex](https://bookapp.alwaysdata.net/pokedex/)** · [Guía de despliegue](docs/DEPLOYMENT.md)
 
-El propietario comprobó catálogo, filtros, diseño móvil y administrador contra MySQL local. El soporte adicional de BASE_PATH se verificó mediante pruebas HTTP automatizadas; su publicación bajo /pokedex/ sigue pendiente.
+La demo ya está publicada bajo `/pokedex/` y el propietario confirmó catálogo, filtros y administración. Utiliza un sitio, directorio, base y cookie propios, aunque comparta alojamiento con BookApp.
+
+| Campo | Valor de la demo |
+| --- | --- |
+| Dirección | `bookapp.alwaysdata.net/pokedex` |
+| Directorio de trabajo relativo | `apps/pokedex` |
+| Comando | `node /home/bookapp/apps/pokedex/server.js` |
+| Prefijo | `BASE_PATH=/pokedex` |
+| Salud HTTP | `/pokedex/healthz` |
+| Administrador | `/pokedex/admin/login` |
+
+El prefijo admite solicitudes recortadas o conservadas por el proxy. Al actualizar, no sustituir el `.env`, la base o el sitio de BookApp. `/healthz` comprueba la respuesta del proceso, no ejecuta una comprobación completa de MySQL.
+
+## Recorrido y parámetros de consulta
+
+1. Buscar por nombre y combinar región y tipo.
+2. Avanzar por páginas; los enlaces conservan los filtros.
+3. Restablecer los filtros cuando no haya resultados.
+4. Para administrar, crear región y tipo antes de registrar un Pokémon.
+5. Probar una edición sin reemplazar imagen y cerrar sesión al terminar.
+
+| Parámetro | Uso |
+| --- | --- |
+| `search` | Texto parcial, recortado a 80 caracteres |
+| `region` | ID positivo de región |
+| `tipo` | ID positivo de tipo |
+| `page` | Página positiva, hasta 10000 |
+
+Ejemplo de estructura local: `/?search=pika&region=1&tipo=1&page=1`. Sustituir los IDs por registros existentes. Cada página contiene hasta 24 resultados. Parámetros inválidos pueden devolver HTTP 400.
+
+## Datos y mantenimiento
+
+No se importa un catálogo completo ni se consulta PokéAPI. Cada Pokémon tiene un único tipo y una región. Las imágenes se guardan en `uploads/`; respaldar esa carpeta junto con la base. Al reiniciar se cierran las sesiones en memoria, pero los registros de MySQL permanecen.
+
+## Solución de problemas
+
+| Situación | Qué revisar |
+| --- | --- |
+| No conecta a MySQL | Base exclusiva, credenciales y permisos |
+| No aparecen resultados | Filtros y registros existentes |
+| Error 400 en filtros | IDs y página positivos, sin listas u objetos |
+| No puede borrar región o tipo | Pokémon relacionados y restricciones instaladas |
+| Rechaza imagen | PNG/JPEG válido de hasta 2 MB |
+| Login o enlaces fuera de la subruta | `BASE_PATH`, cookies y dominio público |
+| No permite crear como visitante | Usar acceso privado; la demo pública es de solo lectura |
+
+Esta ampliación actualiza el estado documentado y contrasta rutas y consultas con el código. No repite la suite ni una revisión visual del despliegue.
 
 ## Límites
 
